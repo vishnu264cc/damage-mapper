@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10233f">
+<title>Damage Mapper | Disaster response intelligence</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://unpkg.com">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<style>
+:root{color-scheme:light;--navy:#10233f;--navy2:#193657;--ink:#172538;--muted:#758196;--line:#e6eaf0;--canvas:#f5f7fa;--white:#fff;--orange:#ef7d32;--red:#d94a3b;--green:#218567;--blue:#3975d5;--shadow:0 6px 24px #10233f0b;--sidebar:252px}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.shell{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:var(--sidebar);background:var(--navy);color:#eaf0f8;display:flex;flex-direction:column;z-index:20;padding:22px 15px 16px}.brand{display:flex;align-items:center;gap:11px;padding:2px 10px 24px}.brand-mark{width:36px;height:36px;border-radius:11px;background:var(--orange);display:grid;place-items:center;color:#fff;font-size:19px;font-weight:900}.brand-name{font-weight:800;letter-spacing:.07em;font-size:14px}.brand-name span{color:#ffad6e}.brand-sub{font-size:10px;color:#a8b8cd;margin-top:1px}.nav-label{padding:9px 11px 6px;color:#899bb2;text-transform:uppercase;font-size:10px;font-weight:750;letter-spacing:.12em}.nav{display:grid;gap:4px}.nav-link{display:flex;align-items:center;gap:12px;padding:10px 11px;border-radius:9px;color:#c5d0df;font-size:13px;font-weight:550;transition:.15s}.nav-link:hover{background:#ffffff12;color:white}.nav-link.active{background:#ffffff18;color:white;box-shadow:inset 3px 0 var(--orange)}.nav-icon{width:18px;text-align:center;font-size:16px}.nav-spacer{height:15px}.sidebar-bottom{margin-top:auto}.service-card{border:1px solid #ffffff20;background:#ffffff0b;padding:12px;border-radius:10px;margin:6px 4px 14px}.service-row{display:flex;align-items:center;gap:8px;font-size:11px;color:#dce7f3}.service-dot{width:8px;height:8px;border-radius:50%;background:#a7b3c2}.service-dot.online{background:#48c797;box-shadow:0 0 0 3px #48c79724}.service-dot.offline{background:#ff7164;box-shadow:0 0 0 3px #ff716424}.service-note{font-size:10px;color:#94a5bc;margin-top:7px}.profile{display:flex;align-items:center;gap:9px;border-top:1px solid #ffffff18;padding:14px 5px 0}.avatar{height:30px;width:30px;border-radius:50%;display:grid;place-items:center;background:#284767;color:#fff;font-weight:750;font-size:11px}.profile strong{font-size:11px;display:block}.profile small{font-size:10px;color:#9eafc5}.main{margin-left:var(--sidebar);min-height:100vh}.topbar{height:70px;background:#ffffffed;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}.top-left,.top-actions{display:flex;align-items:center;gap:13px}.eyebrow{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:750}.top-title{font-size:15px;font-weight:750;margin-top:2px}.top-actions .icon-button{width:36px;height:36px;border:1px solid var(--line);background:#fff;border-radius:9px;color:var(--navy);font-size:15px}.system-pill,.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);background:#fff;border-radius:30px;font-size:10px;color:#637086;font-weight:700}.mobile-toggle{display:none}.content{max-width:1480px;padding:28px 32px 48px;margin:0 auto}.view{display:none}.view.active{display:block}.page-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:22px}.page-heading h1{font-size:26px;letter-spacing:-.035em;margin:4px 0 4px;color:var(--navy)}.page-heading p{margin:0;color:var(--muted);font-size:13px}.kicker{color:var(--orange);font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.button{border:0;border-radius:8px;padding:10px 14px;font-weight:700;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:filter .15s,transform .15s}.button:hover{filter:brightness(.97);transform:translateY(-1px)}.button:disabled{opacity:.55;cursor:wait;transform:none}.primary{background:var(--navy);color:white}.accent{background:var(--orange);color:white}.light{background:#f0f3f7;color:#34465d}.outline{background:white;border:1px solid var(--line);color:#34465d}.danger{background:#fff0ee;color:#b43e31}.success{background:#e8f5ef;color:#176b51}.button.small{font-size:10px;padding:7px 9px}.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}.stat-card,.card{background:var(--white);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)}.stat-card{padding:16px 17px;position:relative;overflow:hidden}.stat-card:after{content:"";position:absolute;right:-18px;top:-18px;width:72px;height:72px;background:#f4f6f9;border-radius:50%}.stat-top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}.stat-label{color:var(--muted);font-size:11px;font-weight:650}.stat-icon{width:29px;height:29px;border-radius:9px;background:#f3f5f8;display:grid;place-items:center;color:var(--navy);font-size:14px}.stat-value{font-size:27px;font-weight:800;letter-spacing:-.04em;margin-top:9px;color:var(--navy);line-height:1.1}.stat-foot{font-size:10px;color:var(--muted);margin-top:5px}.stat-value.loading{color:#c7ced8}.card{padding:18px;margin-bottom:16px}.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:15px}.card-title{font-size:14px;color:var(--navy);font-weight:780;margin:0}.card-subtitle{font-size:11px;color:var(--muted);margin-top:3px}.overview-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.85fr);gap:16px}.overview-grid .card{min-width:0}.map{height:390px;border-radius:10px;overflow:hidden;background:#e8edf2;border:1px solid var(--line);z-index:0}.map.large{height:calc(100vh - 255px);min-height:440px}.map-placeholder{height:100%;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:12px}.map-controls{display:flex;gap:7px;flex-wrap:wrap}.legend{display:flex;gap:13px;flex-wrap:wrap;margin-top:12px;font-size:10px;color:var(--muted)}.legend span{display:flex;align-items:center;gap:5px}.legend-dot{width:8px;height:8px;border-radius:50%}.queue-preview{display:grid;gap:0}.queue-item{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid #eef0f4;min-width:0}.queue-item:last-child{border-bottom:0}.severity-rail{width:3px;height:35px;border-radius:5px;background:#9aa5b4;flex:none}.severity-rail.Critical{background:var(--red)}.severity-rail.High{background:var(--orange)}.severity-rail.Moderate{background:var(--blue)}.severity-rail.Low{background:var(--green)}.queue-info{min-width:0;flex:1}.queue-info strong{display:block;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.queue-info small{color:var(--muted);font-size:10px}.queue-score{text-align:right;font-size:13px;font-weight:800;color:var(--navy)}.queue-score small{display:block;font-size:9px;font-weight:500;color:var(--muted)}.severity{display:inline-flex;align-items:center;padding:3px 7px;border-radius:30px;font-size:9px;font-weight:800;background:#eef1f5;color:#596579}.severity.Critical{background:#fee9e6;color:#ae382d}.severity.High{background:#fff0df;color:#a75c18}.severity.Moderate{background:#e9f0ff;color:#315da4}.severity.Low{background:#e5f4ed;color:#26714f}.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.input,.select,.textarea{border:1px solid #dfe4eb;border-radius:8px;padding:9px 11px;background:white;color:var(--ink);outline:none;font-size:11px}.input:focus,.select:focus,.textarea:focus{border-color:#6886ac;box-shadow:0 0 0 3px #3975d51c}.search-wrap{position:relative;min-width:210px;flex:1}.search-wrap .input{width:100%;padding-left:32px}.search-wrap:before{content:"⌕";position:absolute;left:11px;top:5px;font-size:17px;color:#8792a3}.select{min-width:126px}.incident-list{display:grid;gap:10px}.incident-card{border:1px solid var(--line);border-radius:11px;padding:14px;background:white}.incident-main{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:13px;align-items:start}.incident-thumb{width:58px;height:58px;border-radius:8px;object-fit:cover;background:#edf0f4}.incident-title{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.incident-title strong{font-size:12px}.incident-description{font-size:11px;color:#5e6a7c;margin:7px 0;overflow-wrap:anywhere}.incident-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:9px}.incident-score{text-align:right;color:var(--navy);font-size:17px;font-weight:850}.incident-score small{display:block;font-size:9px;color:var(--muted);font-weight:550}.incident-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;border-top:1px solid #f0f1f4;margin-top:12px;padding-top:11px}.incident-actions .select{min-width:126px;padding:7px 8px}.assign-input{width:155px}.confidence{display:inline-flex;align-items:center;gap:4px}.confidence-dot{width:6px;height:6px;border-radius:50%;background:#9aa5b4}.confidence-dot.good{background:var(--green)}.confidence-dot.low{background:var(--orange)}.empty-state{padding:34px 15px;text-align:center;color:var(--muted);font-size:12px}.empty-icon{font-size:25px;margin-bottom:6px}.split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:16px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.field.full{grid-column:1/-1}.field label{display:block;margin:11px 0 5px;color:#455369;font-size:10px;font-weight:750}.field .input,.field .select,.field .textarea{width:100%;font-size:12px}.textarea{resize:vertical;min-height:90px}.field-hint{font-size:9px;color:var(--muted);margin-top:4px}.file-drop{border:1px dashed #cbd4df;background:#fafbfd;border-radius:10px;padding:15px;text-align:center}.file-drop input{width:100%;font-size:10px}.preview-image{width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:9px}.check-row{display:flex;align-items:center;gap:8px;margin:14px 0 4px;font-size:11px;color:#455369}.check-row input{accent-color:var(--navy)}.notice{border:1px solid #f4d8c8;background:#fff8f4;color:#88512f;padding:11px 12px;border-radius:9px;font-size:10px;line-height:1.55}.notice strong{color:#704126}.form-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:15px}.toast{position:fixed;right:24px;bottom:22px;z-index:50;padding:12px 16px;border-radius:10px;color:white;background:#1f755a;box-shadow:0 8px 26px #16283a30;max-width:min(420px,calc(100vw - 32px));font-size:12px;display:none}.toast.error{background:#aa3c32}.toast.visible{display:block}.hero{background:linear-gradient(112deg,#10233f 0%,#1d3d60 66%,#294a68 100%);border-radius:17px;padding:34px 36px;color:white;position:relative;overflow:hidden;margin-bottom:20px;min-height:245px;display:flex;align-items:center}.hero:after{content:"";position:absolute;width:310px;height:310px;right:8%;top:-90px;border:1px solid #ffffff1a;border-radius:50%;box-shadow:0 0 0 38px #ffffff08,0 0 0 78px #ffffff06}.hero-copy{max-width:640px;position:relative;z-index:1}.hero-label{font-size:10px;letter-spacing:.15em;font-weight:800;color:#ffb27b;text-transform:uppercase}.hero h1{font-size:clamp(28px,4vw,43px);line-height:1.08;letter-spacing:-.045em;margin:12px 0}.hero p{color:#cfdae8;font-size:13px;max-width:540px;margin:0 0 19px}.hero-actions{display:flex;gap:9px;flex-wrap:wrap}.hero .button.outline{border-color:#ffffff55;background:#ffffff12;color:white}.hero-side{position:absolute;right:6%;bottom:22px;color:#ffffff17;font-size:90px;font-weight:900;letter-spacing:-.1em}.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.quick-card{border:1px solid var(--line);background:white;border-radius:12px;padding:16px;text-align:left;transition:.15s}.quick-card:hover{border-color:#c5cfdb;transform:translateY(-2px);box-shadow:var(--shadow)}.quick-card .q-icon{height:32px;width:32px;border-radius:9px;background:#f1f4f8;display:grid;place-items:center;margin-bottom:12px;color:var(--navy);font-size:15px}.quick-card strong{display:block;font-size:12px}.quick-card small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.bar-list{display:grid;gap:13px}.bar-row{display:grid;grid-template-columns:90px minmax(0,1fr) 32px;gap:9px;align-items:center;font-size:10px}.bar-track{height:8px;background:#edf0f4;border-radius:20px;overflow:hidden}.bar-fill{height:100%;border-radius:20px;background:var(--navy);min-width:0;transition:width .25s}.bar-fill.Critical{background:var(--red)}.bar-fill.High{background:var(--orange)}.bar-fill.Moderate{background:var(--blue)}.bar-fill.Low{background:var(--green)}.bar-value{text-align:right;font-weight:750;color:#4d5a6e}.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{border:1px solid var(--line);padding:13px;border-radius:9px}.metric span{display:block;font-size:9px;color:var(--muted)}.metric strong{display:block;color:var(--navy);font-size:20px;margin-top:4px}.ai-model{display:flex;align-items:flex-start;gap:11px;padding:13px;border:1px solid var(--line);border-radius:10px}.ai-mark{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#fff0e5;color:#b35f25;font-weight:900}.ai-model strong{display:block;font-size:12px}.ai-model small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.admin-list{display:grid}.admin-row{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #eef0f4;font-size:11px}.admin-row:last-child{border:0}.admin-row span{color:var(--muted)}.status-label{font-size:10px;font-weight:750;color:#556378}.status-label.online{color:#1b7959}.status-label.offline{color:#b43e31}.safety-banner{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:10px;background:#fff8f0;border:1px solid #f4dfc8;color:#80562e;font-size:10px;line-height:1.6}.divider{height:1px;background:var(--line);margin:14px 0}.page-foot{font-size:10px;color:#929bad;text-align:center;margin:26px 0 0}.small-muted{font-size:10px;color:var(--muted)}.loading-state{color:var(--muted);font-size:11px;padding:16px}.hidden{display:none!important}.pagination{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px}.pagination-label{font-size:10px;color:var(--muted)}.pagination-actions{display:flex;gap:7px}.pagination .button:disabled{opacity:.45}
+@media(max-width:1100px){:root{--sidebar:220px}.content{padding:23px}.topbar{padding:0 23px}.overview-grid{grid-template-columns:minmax(0,1.3fr) minmax(265px,.8fr)}.stat-card{padding:14px}.stats-grid{gap:10px}}
+@media(max-width:850px){:root{--sidebar:250px}.sidebar{transform:translateX(-100%);transition:transform .22s ease;box-shadow:12px 0 30px #10233f26}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.mobile-toggle{display:grid;place-items:center;width:35px;height:35px;border:1px solid var(--line);background:white;border-radius:8px;color:var(--navy)}.topbar{height:62px;padding:0 18px}.content{padding:20px 18px 36px}.overview-grid,.split{grid-template-columns:1fr}.map{height:340px}.map.large{height:58vh;min-height:360px}.sidebar-backdrop{display:none;position:fixed;inset:0;background:#0b1c2c66;z-index:15}.sidebar-backdrop.visible{display:block}}
+@media(max-width:600px){.content{padding:17px 13px 30px}.topbar{padding:0 13px}.top-title{font-size:13px}.topbar .eyebrow{font-size:8px}.system-pill{padding:5px 8px;font-size:9px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat-card{padding:12px}.stat-value{font-size:23px}.stat-label{font-size:10px}.page-heading{align-items:flex-start;flex-direction:column;margin-bottom:16px}.page-heading h1{font-size:23px}.page-heading>.button{align-self:stretch}.hero{padding:25px 20px;min-height:255px}.hero h1{font-size:30px}.hero-side{right:1%;font-size:55px;bottom:6px}.quick-grid{grid-template-columns:1fr}.quick-card{display:flex;gap:11px;align-items:center;padding:12px}.quick-card .q-icon{margin:0;flex:none}.quick-card small{margin-top:2px}.chart-grid{grid-template-columns:1fr}.card{padding:14px}.card-header{flex-direction:column;align-items:stretch}.toolbar{width:100%}.toolbar>*{flex:1}.search-wrap{min-width:100%;flex-basis:100%}.select{min-width:0}.incident-main{grid-template-columns:46px minmax(0,1fr);gap:10px}.incident-thumb{height:46px;width:46px}.incident-score{grid-column:2;grid-row:1;text-align:left;font-size:13px}.incident-title{padding-right:45px}.incident-actions .select{flex:1}.assign-input{flex:1;min-width:120px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.map{height:300px}.map.large{height:55vh;min-height:320px}.metric-row{gap:7px}.metric{padding:10px}.metric strong{font-size:17px}.toast{right:12px;bottom:12px}.top-actions{gap:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+.map-toolbar{display:grid;grid-template-columns:minmax(220px,1.3fr) repeat(3,minmax(135px,.7fr)) auto;gap:8px;align-items:end;margin-bottom:12px}.map-field{display:grid;gap:4px;color:var(--muted);font-size:10px;font-weight:700}.map-field .input,.map-field .select{width:100%}.map-options{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0 12px;color:#516176;font-size:10px}.map-options label{display:flex;align-items:center;gap:5px}.map-options input[type=checkbox]{accent-color:var(--navy)}.map-status{padding:9px 11px;margin:0 0 10px;border-radius:8px;background:#eef3f8;color:#52647a;font-size:11px}.map-status.error{background:#fff0ee;color:#a33b31}.map-status[hidden]{display:none}.map-selection{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:9px;background:#fbfcfe;color:#43546a;font-size:11px}.map-selection strong{color:var(--navy)}.map-selection p{margin:5px 0}.map-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:10px;color:var(--muted)}.map-legend span{display:flex;align-items:center;gap:5px}.priority-swatch{width:10px;height:10px;border-radius:50%;border:1px solid #fff;box-shadow:0 0 0 1px #10233f25}.responder-token{width:190px!important}.leaflet-popup-content{min-width:190px}.incident-map-icon{background:transparent;border:0}.map-cluster{background:#193657;color:#fff;border:3px solid #fff;border-radius:50%;box-shadow:0 1px 6px #10233f55;text-align:center;font-weight:800;line-height:34px}.map-cluster span{display:block}.map-error{padding:18px;text-align:center;color:#a33b31}
+@media(max-width:900px){.map-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.map-toolbar .map-search{grid-column:1/-1}}
+@media(max-width:600px){.map-toolbar{grid-template-columns:1fr}.map-toolbar .map-search{grid-column:auto}.map-options{gap:9px}.map-options label{min-height:30px}.responder-token{width:100%!important}}
+</style>
+<style>
+.auth-gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:20px;background:#10233f}
+.auth-gate.hidden{display:none}.auth-card{width:min(100%,440px);padding:30px;background:#fff;border-radius:16px;box-shadow:0 20px 70px #07142666}
+.auth-card h1{margin:8px 0}.auth-card p{color:#758196}.auth-form{display:grid;gap:14px;margin-top:22px}
+.auth-error{color:#b42318;background:#fff1f0;border:1px solid #ffd1cc;padding:10px;border-radius:8px}
+.auth-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}.auth-identity{font-size:12px;color:#526174}
+@media(max-width:600px){.auth-identity{display:none}.top-actions{gap:6px}}
+#appShell [hidden]{display:none!important}
+.analytics-filter-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.analytics-filter-grid .field{margin:0;min-width:0}
+.analytics-filter-grid .input,.analytics-filter-grid .select{width:100%;min-width:0}
+.analytics-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;flex-wrap:wrap}
+.analytics-filter-note{margin-top:10px;color:#758196;font-size:10px}
+.analytics-kpi-pair{font-size:20px;letter-spacing:-.02em}
+.analytics-extra-grid{display:grid;grid-template-columns:1fr;gap:16px}
+.analytics-geo-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.55fr);gap:16px;align-items:start}
+.analytics-map{height:360px;border-radius:10px;overflow:hidden;background:#e8edf2;border:1px solid var(--line)}
+.analytics-trend-list{max-height:360px;overflow:auto}
+.geo-list{display:grid;gap:8px;margin-top:12px}
+.geo-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #eef0f4;font-size:11px}
+.geo-row:last-child{border-bottom:0}
+.geo-row strong{color:var(--navy)}
+@media(max-width:1000px){.analytics-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.analytics-geo-layout{grid-template-columns:1fr}.analytics-map{height:300px}}
+@media(max-width:480px){.analytics-filter-grid{grid-template-columns:1fr}.analytics-actions .button{flex:1}}
+</style>
+</head>
+<body>
+<section class="auth-gate" id="authGate" aria-labelledby="authTitle">
+  <div class="auth-card">
+    <div class="brand"><span class="brand-mark">D</span><span class="brand-name">DAMAGE <span>MAPPER</span></span></div>
+    <h1 id="authTitle">Sign in to Damage Mapper</h1>
+    <p>Access incident reporting and response tools with your authorized account.</p>
+    <form class="auth-form" id="authForm">
+      <label id="authNameField" hidden>Name<input class="input" id="authName" maxlength="200" autocomplete="name"></label>
+      <label>Email<input class="input" id="authEmail" type="email" required maxlength="320" autocomplete="username"></label>
+      <label>Password<input class="input" id="authPassword" type="password" required minlength="12" maxlength="128" autocomplete="current-password"></label>
+      <div class="auth-error" id="authError" role="alert" hidden></div>
+      <button class="button primary" id="authSubmit" type="submit">Sign in</button>
+    </form>
+    <div class="auth-actions"><span class="small-muted">Public signup creates a citizen account.</span><button class="button light small" id="authModeToggle" type="button">Create account</button></div>
+  </div>
+</section>
+<div class="shell" id="appShell">
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<aside class="sidebar" id="sidebar" aria-label="Main navigation">
+  <a class="brand" href="#overview" aria-label="Damage Mapper home"><span class="brand-mark">D</span><span><span class="brand-name">DAMAGE <span>MAPPER</span></span><span class="brand-sub">DISASTER RESPONSE INTELLIGENCE</span></span></a>
+  <div class="nav-label">Workspace</div>
+  <nav class="nav">
+    <a class="nav-link" href="#overview" data-view="overview"><span class="nav-icon">⌂</span>Overview</a>
+    <a class="nav-link" href="#dashboard" data-view="dashboard"><span class="nav-icon">▦</span>Emergency dashboard</a>
+    <a class="nav-link" href="#incidents" data-view="incidents"><span class="nav-icon">≡</span>Incident management</a>
+    <a class="nav-link" href="#map" data-view="map"><span class="nav-icon">⌖</span>Live incident map</a>
+    <a class="nav-link" href="#analytics" data-view="analytics"><span class="nav-icon">▥</span>Analytics</a>
+  </nav>
+  <div class="nav-spacer"></div><div class="nav-label">Field &amp; system</div>
+  <nav class="nav">
+    <a class="nav-link" href="#report" data-view="report"><span class="nav-icon">＋</span>Citizen reporting</a>
+    <a class="nav-link" href="#ai-analysis" data-view="ai-analysis"><span class="nav-icon">✳</span>AI analysis</a>
+    <a class="nav-link" href="#admin" data-view="admin"><span class="nav-icon">⚙</span>Administration</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="service-card"><div class="service-row"><i class="service-dot" id="sidebarHealthDot"></i><span id="sidebarHealthText">Checking API…</span></div><div class="service-note">Live status from the Damage Mapper API</div></div>
+    <div class="profile"><span class="avatar">DM</span><div><strong>Response workspace</strong><small>Prototype · human review required</small></div></div>
+  </div>
+</aside>
+<div class="main">
+  <header class="topbar">
+    <div class="top-left"><button class="mobile-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button><div><div class="eyebrow">Disaster response platform</div><div class="top-title" id="topTitle">Overview</div></div></div>
+    <div class="top-actions"><span class="system-pill"><i class="service-dot" id="topHealthDot"></i><span id="topHealthText">Connecting</span></span><span class="auth-identity" id="identityLabel"></span><button class="button light small" id="logoutButton" type="button">Sign out</button><button class="icon-button" id="refreshButton" title="Refresh live data" aria-label="Refresh live data">↻</button></div>
+  </header>
+  <main class="content">
+    <section class="view" id="view-overview">
+      <div class="hero"><div class="hero-copy"><div class="hero-label">Situational awareness · live operations</div><h1>See the impact.<br>Coordinate the response.</h1><p>Bring field reports, AI-assisted image review, and response prioritization into one operational picture. All incident metrics below are fetched from the live API.</p><div class="hero-actions"><button class="button accent" data-go="dashboard">Open response dashboard <span>→</span></button><button class="button outline" data-go="report">＋ Submit a field report</button></div></div><div class="hero-side" aria-hidden="true">DM</div></div>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Total incidents</span><span class="stat-icon">▦</span></div><div class="stat-value loading" data-stat="total">—</div><div class="stat-foot">Reports recorded by the API</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Awaiting verification</span><span class="stat-icon">◷</span></div><div class="stat-value loading" data-stat="pending">—</div><div class="stat-foot">Human review needed</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Critical reports</span><span class="stat-icon">!</span></div><div class="stat-value loading" data-stat="critical">—</div><div class="stat-foot">Not marked as rejected</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Resolved</span><span class="stat-icon">✓</span></div><div class="stat-value loading" data-stat="resolved">—</div><div class="stat-foot">Incident status: resolved</div></article>
+      </div>
+      <div class="overview-grid">
+        <section class="card"><div class="card-header"><div><h2 class="card-title">Operational map</h2><div class="card-subtitle">Incident locations from the live incident API</div></div><button class="button light small" data-go="map">Explore map →</button></div><div class="map" id="overviewMap"></div><div class="legend"><span><i class="legend-dot" style="background:var(--red)"></i>Critical</span><span><i class="legend-dot" style="background:var(--orange)"></i>High</span><span><i class="legend-dot" style="background:var(--blue)"></i>Moderate</span><span><i class="legend-dot" style="background:var(--green)"></i>Low</span></div></section>
+        <section class="card"><div class="card-header"><div><h2 class="card-title">Priority queue</h2><div class="card-subtitle">Highest reported priority first</div></div><button class="button light small" data-go="incidents">View all →</button></div><div class="queue-preview" id="overviewQueue"><div class="loading-state">Loading reports from API…</div></div></section>
+      </div>
+      <div class="quick-grid">
+        <button class="quick-card" data-go="incidents"><span class="q-icon">≡</span><span><strong>Manage incidents</strong><small>Search, verify, assign and update response status</small></span></button>
+        <button class="quick-card" data-go="analytics"><span class="q-icon">▥</span><span><strong>Review analytics</strong><small>Explore live severity, category and status breakdowns</small></span></button>
+        <button class="quick-card" data-go="ai-analysis"><span class="q-icon">✳</span><span><strong>AI analysis</strong><small>See model health and classification confidence</small></span></button>
+      </div>
+    </section>
+
+    <section class="view" id="view-dashboard">
+      <div class="page-heading"><div><div class="kicker">Command center</div><h1>Emergency dashboard</h1><p>Live incident activity and response priorities from the FastAPI service.</p></div><button class="button outline" data-action="refresh">↻ Refresh data</button></div>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Total incidents</span><span class="stat-icon">▦</span></div><div class="stat-value loading" data-stat="total">—</div><div class="stat-foot">All submitted reports</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Pending review</span><span class="stat-icon">◷</span></div><div class="stat-value loading" data-stat="pending">—</div><div class="stat-foot">Awaiting human verification</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Critical</span><span class="stat-icon">!</span></div><div class="stat-value loading" data-stat="critical">—</div><div class="stat-foot">Excluding rejected reports</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Resolved</span><span class="stat-icon">✓</span></div><div class="stat-value loading" data-stat="resolved">—</div><div class="stat-foot">Closed response actions</div></article>
+      </div>
+      <div class="overview-grid"><section class="card"><div class="card-header"><div><h2 class="card-title">Incident distribution</h2><div class="card-subtitle">Live coordinates and model/verified severity labels</div></div><button class="button light small" data-go="map">Full map →</button></div><div class="map" id="dashboardMap"></div><div class="legend"><span><i class="legend-dot" style="background:var(--red)"></i>Critical</span><span><i class="legend-dot" style="background:var(--orange)"></i>High</span><span><i class="legend-dot" style="background:var(--blue)"></i>Moderate</span><span><i class="legend-dot" style="background:var(--green)"></i>Low</span></div></section><section class="card"><div class="card-header"><div><h2 class="card-title">Highest priority reports</h2><div class="card-subtitle">Sorted by API priority score</div></div></div><div class="queue-preview" id="dashboardQueue"><div class="loading-state">Loading reports from API…</div></div><div class="divider"></div><button class="button primary" data-go="incidents">Open incident management →</button></section></div>
+    </section>
+
+    <section class="view" id="view-incidents">
+      <div class="page-heading"><div><div class="kicker">Response operations</div><h1>Incident management</h1><p>Review live reports, verify evidence, assign a team and track response status.</p></div><button class="button accent" data-go="report">＋ New report</button></div>
+      <section class="card"><div class="card-header"><div><h2 class="card-title">Incident queue</h2><div class="card-subtitle" id="incidentCount">Loading incidents…</div></div><button class="button outline small" data-action="refresh">↻ Refresh</button></div>
+        <div class="toolbar" style="margin-bottom:14px"><div class="search-wrap"><input class="input" type="search" id="incidentSearch" placeholder="Search reports, location, team…" aria-label="Search incidents"></div><select class="select" id="severityFilter" aria-label="Filter by severity"><option value="all">All severity</option><option>Critical</option><option>High</option><option>Moderate</option><option>Low</option></select><select class="select" id="statusFilter" aria-label="Filter by verification status"><option value="all">All verification</option><option>Pending</option><option>Verified</option><option>Rejected</option></select><select class="select" id="workflowFilter" aria-label="Filter by response status"><option value="all">All response status</option><option>Reported</option><option>Assigned</option><option>In progress</option><option>Resolved</option></select></div>
+        <div class="incident-list" id="incidentList"><div class="loading-state">Loading incidents from API…</div></div><div id="incidentPagination"></div>
+      </section>
+    </section>
+
+    <section class="view" id="view-map">
+      <div class="page-heading"><div><div class="kicker">Geospatial operations</div><h1>Live incident map</h1><p>Incident points, priority and review details come from the live API.</p></div><div class="toolbar"><button class="button outline" data-action="locate">◎ My location</button><button class="button primary" data-action="refresh-map">↻ Refresh map</button></div></div>
+      <section class="card"><div class="card-header"><div><h2 class="card-title">Incident locations</h2><div class="card-subtitle" id="mapCount" aria-live="polite">Loading locations…</div></div></div>
+        <div class="map-toolbar">
+          <label class="map-field map-search" for="mapLocationSearch">Search a place<div class="toolbar"><input class="input" id="mapLocationSearch" type="search" maxlength="160" placeholder="City, district or landmark"><button class="button light small" id="mapLocationSearchButton" type="button" data-action="find-location">Search</button></div></label>
+          <label class="map-field" for="mapCategoryFilter">Disaster category<select class="select" id="mapCategoryFilter"><option value="all">All categories</option></select></label>
+          <label class="map-field" for="mapSeverityFilter">Severity<select class="select" id="mapSeverityFilter"><option value="all">All severity</option><option>Critical</option><option>High</option><option>Moderate</option><option>Low</option></select></label>
+          <label class="map-field" for="mapRadiusKm">Radius from map center · km<input class="input" id="mapRadiusKm" type="number" min="0.1" max="500" step="0.1" placeholder="No radius"></label>
+          <button class="button outline" id="mapApplyButton" type="button" data-action="apply-map-filters">Apply filters</button>
+        </div>
+        <div class="map-options" aria-label="Map overlays">
+          <label><input id="mapClusterToggle" type="checkbox" checked> Cluster nearby incidents</label>
+          <label><input id="mapHeatToggle" type="checkbox"> Priority heatmap</label>
+          <label><input id="mapDuplicateToggle" type="checkbox"> Possible duplicates only</label>
+          <label id="mapResponderOption"><input id="mapResponderToggle" type="checkbox"> Responders</label>
+        </div>
+        <div class="map-status" id="mapStatus" role="status" aria-live="polite" hidden></div>
+        <div class="map large" id="fullMap" role="region" aria-label="Interactive incident map"><div class="map-placeholder">Loading live incident locations…</div></div>
+        <div class="map-selection" id="mapSelection" aria-live="polite">Select a marker to review incident details.</div>
+        <div class="map-legend" aria-label="Priority marker legend"><span><i class="priority-swatch" style="background:#218567"></i>Priority 0–39</span><span><i class="priority-swatch" style="background:#3975d5"></i>Priority 40–69</span><span><i class="priority-swatch" style="background:#ef7d32"></i>Priority 70–84</span><span><i class="priority-swatch" style="background:#d94a3b"></i>Priority 85–100</span><span>Severity, verification and report time are shown in marker details.</span><span>© OpenStreetMap contributors</span></div>
+      </section>
+    </section>
+
+    <section class="view" id="view-report">
+      <div class="page-heading"><div><div class="kicker">Community field reporting</div><h1>Submit a disaster report</h1><p>Share a location and ground-level observations to support a common operational picture.</p></div></div>
+      <div class="split"><section class="card"><div class="card-header"><div><h2 class="card-title">Incident details</h2><div class="card-subtitle">Required fields are sent to the existing incident API.</div></div><span class="badge">Human verification required</span></div>
+        <form id="reportForm"><div class="form-grid">
+          <div class="field full"><label for="reportImage">Photograph · JPG, PNG or WEBP · maximum 10 MB *</label><div class="file-drop"><input id="reportImage" type="file" name="image" accept="image/jpeg,image/png,image/webp" required><div class="field-hint">Upload a clear image of visible conditions. Do not include sensitive personal information.</div><img id="imagePreview" class="preview-image hidden" alt="Selected image preview"></div></div>
+          <div class="field full"><label for="description">What did you observe? *</label><textarea class="textarea" id="description" name="description" maxlength="4000" placeholder="Describe visible damage, hazards, blocked routes or urgent needs…" required></textarea></div>
+          <div class="field"><label for="latitude">Latitude *</label><input class="input" id="latitude" type="number" step="any" name="latitude" placeholder="12.9716" required></div>
+          <div class="field"><label for="longitude">Longitude *</label><input class="input" id="longitude" type="number" step="any" name="longitude" placeholder="77.5946" required></div>
+          <div class="field"><label for="urgency">Urgency · 0–100</label><input class="input" id="urgency" type="number" name="urgency" min="0" max="100" value="60"></div>
+          <div class="field"><label for="peopleAffected">People affected · estimate</label><input class="input" id="peopleAffected" type="number" name="people_affected" min="0" value="0"></div>
+          <div class="field full"><label for="reporter">Reporting account · profile name</label><input class="input" id="reporter" name="reporter" maxlength="200" readonly aria-readonly="true"></div>
+        </div><label class="check-row"><input type="checkbox" id="accessBlocked" name="access_blocked"> Road or emergency access is blocked</label>
+        <div class="form-actions"><button class="button accent" id="submitButton" type="submit">✳ Analyse &amp; submit report</button><button class="button outline" type="button" data-action="locate-form">◎ Use GPS location</button></div>
+        </form></section>
+        <aside><section class="card"><div class="card-header"><div><h2 class="card-title">AI-assisted assessment</h2><div class="card-subtitle">Classification runs through the configured backend model during submission.</div></div></div><div class="ai-model"><span class="ai-mark">✳</span><div><strong id="reportModelName">Checking model status…</strong><small id="reportModelNote">Model availability is read from the FastAPI health endpoint.</small></div></div><div class="divider"></div><div class="safety-banner"><strong>Safety notice</strong><span>This prototype is not an emergency dispatch service. For immediate danger, contact local emergency services. AI outputs and priority scores are preliminary and require authorized human verification.</span></div></section>
+          <section class="card">          <div class="card-header"><div><h2 class="card-title">Demo scenario</h2><div class="card-subtitle">Load synthetic records to explore the map and queue.</div></div></div><p class="small-muted">Demo incidents are clearly labeled and do not represent real events or live disaster data.</p><button class="button light" data-admin-only data-action="seed-demo">＋ Load sample incidents</button></section></aside>
+      </div>
+    </section>
+
+    <section class="view" id="view-analytics">
+      <div class="page-heading"><div><div class="kicker">Situation intelligence</div><h1>Incident analytics</h1><p>Filtered metrics and reports are calculated from stored incident records.</p></div><button class="button outline" data-action="refresh">↻ Refresh analytics</button></div>
+      <section class="card">
+        <div class="card-header"><div><h2 class="card-title">Report filters</h2><div class="card-subtitle">The same applied filters are used for all metrics and CSV exports.</div></div></div>
+        <div class="analytics-filter-grid">
+          <div class="field"><label for="analyticsDateFrom">Reported from</label><input class="input" type="date" id="analyticsDateFrom"></div>
+          <div class="field"><label for="analyticsDateTo">Reported through</label><input class="input" type="date" id="analyticsDateTo"></div>
+          <div class="field"><label for="analyticsDamageType">Disaster category</label><select class="select" id="analyticsDamageType"><option value="all">All categories</option></select></div>
+          <div class="field"><label for="analyticsSeverity">Severity</label><select class="select" id="analyticsSeverity"><option value="all">All severities</option><option>Critical</option><option>High</option><option>Moderate</option><option>Low</option></select></div>
+          <div class="field"><label for="analyticsVerification">Verification</label><select class="select" id="analyticsVerification"><option value="all">All verification states</option><option>Pending</option><option>Verified</option><option>Rejected</option></select></div>
+          <div class="field"><label for="analyticsResponse">Response status</label><select class="select" id="analyticsResponse"><option value="all">All response states</option><option>Reported</option><option>Assigned</option><option>In progress</option><option>Resolved</option></select></div>
+          <div class="field"><label for="analyticsMinLatitude">South latitude</label><input class="input" type="number" step="any" min="-90" max="90" id="analyticsMinLatitude" placeholder="-90"></div>
+          <div class="field"><label for="analyticsMaxLatitude">North latitude</label><input class="input" type="number" step="any" min="-90" max="90" id="analyticsMaxLatitude" placeholder="90"></div>
+          <div class="field"><label for="analyticsMinLongitude">West longitude</label><input class="input" type="number" step="any" min="-180" max="180" id="analyticsMinLongitude" placeholder="-180"></div>
+          <div class="field"><label for="analyticsMaxLongitude">East longitude</label><input class="input" type="number" step="any" min="-180" max="180" id="analyticsMaxLongitude" placeholder="180"></div>
+        </div>
+        <div class="analytics-filter-note">Geographic bounds form a latitude/longitude rectangle. Enter all four coordinates to apply a location filter.</div>
+        <div class="analytics-actions"><button class="button outline" data-action="clear-analytics">Clear filters</button><button class="button light" data-action="export-analytics">↓ Export filtered CSV</button><button class="button primary" data-action="apply-analytics">Apply filters</button></div>
+      </section>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Total incidents</span><span class="stat-icon">▦</span></div><div class="stat-value" id="analyticsTotal">—</div><div class="stat-foot">Matching incident records</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Critical + high severity</span><span class="stat-icon">!</span></div><div class="stat-value" id="analyticsCriticalHigh">—</div><div class="stat-foot" id="analyticsHighPriorityFoot">High-priority threshold: —</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Verified / pending</span><span class="stat-icon">✓</span></div><div class="stat-value analytics-kpi-pair" id="analyticsVerifiedPending">—</div><div class="stat-foot" id="analyticsVerificationFoot">Rejected: —</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Resolved / active</span><span class="stat-icon">↗</span></div><div class="stat-value analytics-kpi-pair" id="analyticsResolvedActive">—</div><div class="stat-foot">Current response workflow</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Average verification time</span><span class="stat-icon">◷</span></div><div class="stat-value" id="analyticsVerificationTime">—</div><div class="stat-foot" id="analyticsVerificationTimeFoot">No completed reviews</div></article>
+        <article class="stat-card"><div class="stat-top"><span class="stat-label">Mean priority</span><span class="stat-icon">⧉</span></div><div class="stat-value" id="meanPriority">—</div><div class="stat-foot" id="duplicateCount">Possible duplicates: —</div></article>
+      </div>
+      <div class="chart-grid"><section class="card"><div class="card-header"><div><h2 class="card-title">Severity distribution</h2><div class="card-subtitle">Counts by reported severity label</div></div></div><div class="bar-list" id="severityChart"></div></section><section class="card"><div class="card-header"><div><h2 class="card-title">Verification status</h2><div class="card-subtitle">Human review workflow</div></div></div><div class="bar-list" id="verificationChart"></div></section><section class="card"><div class="card-header"><div><h2 class="card-title">Damage categories</h2><div class="card-subtitle">Classifier output or human-review category</div></div></div><div class="bar-list" id="categoryChart"></div></section><section class="card"><div class="card-header"><div><h2 class="card-title">Incident response status</h2><div class="card-subtitle">Current operational workflow state</div></div></div><div class="bar-list" id="workflowChart"></div></section><section class="card"><div class="card-header"><div><h2 class="card-title">Incident trends over time</h2><div class="card-subtitle" id="analyticsTrendSubtitle">Counts grouped by report date</div></div></div><div class="bar-list analytics-trend-list" id="trendChart"></div></section></div>
+      <div class="analytics-extra-grid"><section class="card"><div class="card-header"><div><h2 class="card-title">Geographic concentration</h2><div class="card-subtitle">Incidents grouped into rounded 0.01° coordinate cells</div></div></div><div class="analytics-geo-layout"><div class="analytics-map" id="analyticsMap" role="region" aria-label="Map of incident concentration"></div><div class="geo-list" id="geoConcentrationList"></div></div></section></div>
+      <div class="page-foot">Analytics summarize prototype records and are not independently validated operational intelligence.</div>
+    </section>
+
+    <section class="view" id="view-ai-analysis">
+      <div class="page-heading"><div><div class="kicker">Machine-assisted triage</div><h1>AI analysis</h1><p>Review configured model health, returned labels and confidence from actual submissions.</p></div><button class="button outline" data-action="refresh">↻ Refresh model status</button></div>
+      <div class="split"><section class="card"><div class="card-header"><div><h2 class="card-title">Inference service</h2><div class="card-subtitle">Live values from <code>/api/health</code> and stored incident analyses.</div></div></div><div class="ai-model"><span class="ai-mark">✳</span><div><strong id="aiModelName">Loading model status…</strong><small id="aiModelNote">Connecting to the API health endpoint.</small></div></div><div class="divider"></div><div class="metric-row"><div class="metric"><span>Analysed reports</span><strong id="aiAnalysed">—</strong></div><div class="metric"><span>Mean CLIP score</span><strong id="aiConfidence">—</strong></div><div class="metric"><span>Needs review</span><strong id="aiReview">—</strong></div></div><p class="small-muted" style="margin-top:14px">CLIP scores are uncalibrated ranking scores, not validated probabilities or severity estimates. They do not prove damage, casualties, or structural safety.</p></section>
+        <section class="card"><div class="card-header"><div><h2 class="card-title">Incident categories</h2><div class="card-subtitle">Persisted category labels; not all are model predictions</div></div></div><div class="bar-list" id="aiCategoryChart"></div></section></div>
+      <section class="card"><div class="card-header"><div><h2 class="card-title">Recent image assessments</h2><div class="card-subtitle">Model status, candidates, detections and timing from incident records.</div></div><button class="button light small" data-go="incidents">Review incidents →</button></div><div class="incident-list" id="aiRecent"><div class="loading-state">Loading incident analyses…</div></div></section>
+      <div class="notice"><strong>Decision support only.</strong> CLIP produces coarse scene interpretations and optional YOLO models detect their trained object classes. Neither determines structural integrity, casualty counts, or verified damage; low-confidence and unavailable results require human review.</div>
+    </section>
+
+    <section class="view" id="view-admin">
+      <div class="page-heading"><div><div class="kicker">Platform operations</div><h1>Administration</h1><p>Inspect live service health and available prototype operations.</p></div><button class="button outline" data-action="refresh">↻ Refresh status</button></div>
+      <div class="split"><section class="card"><div class="card-header"><div><h2 class="card-title">Service health</h2><div class="card-subtitle">Read-only status from the FastAPI health endpoint.</div></div><span class="badge" id="adminHealthBadge">Checking</span></div><div class="admin-list"><div class="admin-row"><strong>API service</strong><span class="status-label" id="adminApiStatus">Checking…</span></div><div class="admin-row"><strong>Application</strong><span id="adminAppName">—</span></div><div class="admin-row"><strong>Image model</strong><span id="adminModelName">—</span></div><div class="admin-row"><strong>Model diagnostic</strong><span id="adminModelError">—</span></div><div class="admin-row"><strong>Incident records</strong><span id="adminIncidentCount">—</span></div><div class="admin-row"><strong>Storage mode</strong><span>Local SQLite + uploads</span></div></div></section>
+        <section class="card"><div class="card-header"><div><h2 class="card-title">Demo data controls</h2><div class="card-subtitle">Uses the existing synthetic-data endpoint.</div></div></div><p class="small-muted">Sample IDs are stable; the backend may return no new records when samples already exist.</p><button class="button light" data-admin-only data-action="seed-demo">＋ Load sample incidents</button><div class="divider"></div><button class="button outline" data-action="refresh">↻ Reload live service data</button></section></div>
+      <section class="card"><div class="card-header"><div><h2 class="card-title">Access and operational safeguards</h2><div class="card-subtitle">Protected accounts and recorded administrative actions.</div></div></div><div class="admin-list"><div class="admin-row"><strong>Authentication</strong><span>Revocable bearer sessions · Argon2id passwords</span></div><div class="admin-row"><strong>Roles</strong><span>Citizen · Field responder · Emergency administrator</span></div><div class="admin-row"><strong>Audit history</strong><span>Actor-linked verification, assignment and configuration records</span></div><div class="admin-row"><strong>Priority scoring</strong><span>Preliminary heuristic; requires expert validation</span></div></div></section>
+    </section>
+    <div class="page-foot">Damage Mapper · AI-assisted disaster assessment · Not an emergency dispatch service</div>
+  </main>
+</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script>
+(() => {
+  const state = { incidents: [], mapIncidents: [], mapMeta: null, mapQuery: null, mapError: null, mapLoading: true, mapRequestId: 0, mapResponders: [], responderError: null, recentIncidents: [], analytics: null, analyticsQuery: "", analyticsLayer: null, pagination: { total: 0, page: 1, page_size: 25, pages: 0 }, page: 1, pageSize: 25, stats: null, health: null, maps: {}, activeView: "overview", toastTimer: null, searchTimer: null, requestId: 0, previewUrl: null, currentUser: null };
+  const titles = { overview: "Overview", dashboard: "Emergency dashboard", incidents: "Incident management", map: "Live incident map", analytics: "Analytics", report: "Citizen reporting", "ai-analysis": "AI analysis", admin: "Administration" };
+  const severityColors = { Critical: "#d94a3b", High: "#ef7d32", Moderate: "#3975d5", Low: "#218567" };
+  const severityOrder = ["Critical", "High", "Moderate", "Low"];
+  const workflowStatuses = ["Reported", "Assigned", "In progress", "Resolved"];
+  let authMode = "login";
+  const byId = id => document.getElementById(id);
+  const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+  const number = value => Number.isFinite(Number(value)) ? Number(value) : 0;
+  const confidence = item => {
+    const score = number(item.model_confidence);
+    return score > 1 ? score / 100 : score;
+  };
+
+  async function request(url, options = {}) {
+    const headers = new Headers(options.headers || {});
+    const token = sessionStorage.getItem("dmAccessToken");
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    const response = await fetch(url, { ...options, headers });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 401 && token) {
+      sessionStorage.removeItem("dmAccessToken");
+      state.currentUser = null;
+      showAuthGate("Your session expired. Please sign in again.");
+    }
+    if (!response.ok) throw new Error(data.detail || `Request failed (${response.status})`);
+    return data;
+  }
+
+  function releasePrivateImages(container) {
+    container.querySelectorAll("img[data-private-image]").forEach(image => {
+      if (image.dataset.objectUrl) {
+        URL.revokeObjectURL(image.dataset.objectUrl);
+        image.removeAttribute("src");
+        delete image.dataset.objectUrl;
+      }
+    });
+  }
+
+  async function hydratePrivateImages(container) {
+    const token = sessionStorage.getItem("dmAccessToken");
+    const images = [...container.querySelectorAll("img[data-private-image]")]
+      .filter(image => image.dataset.privateImage);
+    await Promise.all(images.map(async image => {
+      try {
+        const response = await fetch(image.dataset.privateImage, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!response.ok) {
+          image.style.visibility = "hidden";
+          return;
+        }
+        const objectUrl = URL.createObjectURL(await response.blob());
+        image.dataset.objectUrl = objectUrl;
+        image.src = objectUrl;
+      } catch {
+        image.style.visibility = "hidden";
+      }
+    }));
+  }
+
+  function showAuthGate(message = "") {
+    releasePrivateImages(byId("appShell"));
+    state.incidents = [];
+    state.mapIncidents = [];
+    state.recentIncidents = [];
+    state.mapResponders = [];
+    byId("appShell").style.display = "none";
+    byId("authGate").classList.remove("hidden");
+    byId("authError").textContent = message;
+    byId("authError").hidden = !message;
+  }
+
+  function applyUserRole() {
+    const citizen = state.currentUser?.role === "citizen";
+    const allowedViews = citizen ? ["report", "incidents"] : Object.keys(titles);
+    document.querySelectorAll(".nav-link").forEach(link => {
+      link.hidden = !allowedViews.includes(link.dataset.view);
+    });
+    ["overview", "dashboard", "map", "analytics", "ai-analysis", "admin"].forEach(view => {
+      const section = byId(`view-${view}`);
+      if (section) section.hidden = citizen;
+    });
+    document.querySelectorAll("[data-admin-only]").forEach(element => {
+      element.hidden = state.currentUser?.role !== "admin";
+    });
+    byId("mapResponderOption").hidden = state.currentUser?.role !== "admin";
+    byId("identityLabel").textContent = `${state.currentUser.display_name} · ${state.currentUser.role}`;
+    byId("reporter").value = state.currentUser.display_name;
+    byId("reporter").readOnly = true;
+    byId("authGate").classList.add("hidden");
+    byId("appShell").style.display = "";
+    if (!allowedViews.includes(state.activeView)) navigate(citizen ? "report" : "overview");
+  }
+
+  async function requestAllMapPoints(params) {
+    const items = [];
+    let offset = 0;
+    let total = 0;
+    let metadata = null;
+    do {
+      const pageParams = new URLSearchParams(params);
+      pageParams.set("offset", String(offset));
+      metadata = await request(`/api/incidents/map?${pageParams}`);
+      items.push(...(Array.isArray(metadata.items) ? metadata.items : []));
+      total = Number(metadata.total) || 0;
+      if (!metadata.returned || offset + metadata.returned >= total) break;
+      offset += metadata.returned;
+    } while (offset < total);
+    return { ...metadata, items, total, returned: items.length, offset: 0, has_more: false };
+  }
+
+  function showToast(message, type = "ok") {
+    const toast = byId("toast");
+    toast.textContent = message;
+    toast.className = `toast visible${type === "error" ? " error" : ""}`;
+    clearTimeout(state.toastTimer);
+    state.toastTimer = setTimeout(() => { toast.className = "toast"; }, 6000);
+  }
+
+  function setHealth(health) {
+    state.health = health;
+    const online = health?.status === "ok";
+    for (const [dotId, textId] of [["sidebarHealthDot", "sidebarHealthText"], ["topHealthDot", "topHealthText"]]) {
+      byId(dotId).className = `service-dot ${online ? "online" : "offline"}`;
+      byId(textId).textContent = online ? "API connected" : "API unavailable";
+    }
+    byId("adminHealthBadge").textContent = online ? "Service online" : "Service unavailable";
+    byId("adminHealthBadge").className = `badge ${online ? "status-label online" : "status-label offline"}`;
+    byId("adminApiStatus").textContent = online ? "Available" : "Unavailable";
+    byId("adminApiStatus").className = `status-label ${online ? "online" : "offline"}`;
+    byId("adminAppName").textContent = health?.app || "—";
+    byId("adminModelName").textContent = health?.model || "—";
+    byId("adminModelError").textContent = health?.model_error || (online ? "No reported error" : "Health endpoint unavailable");
+    byId("aiModelName").textContent = health?.model || "Model status unavailable";
+    byId("aiModelNote").textContent = health?.model_error ? `Model diagnostic: ${health.model_error}` : (health?.note || "No model diagnostic returned.");
+    byId("reportModelName").textContent = health?.model || "Model status unavailable";
+    byId("reportModelNote").textContent = health?.model_error ? `Model diagnostic: ${health.model_error}` : (health?.note || "Inference outcome is returned after report submission.");
+  }
+
+  function setStats(stats) {
+    state.stats = stats;
+    document.querySelectorAll("[data-stat]").forEach(node => {
+      const value = stats?.[node.dataset.stat];
+      node.textContent = Number.isFinite(Number(value)) ? Number(value).toLocaleString() : "—";
+      node.classList.remove("loading");
+    });
+  }
+
+  async function refreshData(showMessage = false) {
+    const requestId = ++state.requestId;
+    const params = new URLSearchParams({ page: String(state.page), page_size: String(state.pageSize) });
+    if (state.activeView === "incidents") {
+      const search = byId("incidentSearch").value.trim();
+      const severity = byId("severityFilter").value;
+      const verification = byId("statusFilter").value;
+      const workflow = byId("workflowFilter").value;
+      if (search) params.set("q", search);
+      if (severity !== "all") params.set("severity", severity);
+      if (verification !== "all") params.set("verification_status", verification);
+      if (workflow !== "all") params.set("incident_status", workflow);
+    }
+    if (state.currentUser?.role === "citizen") {
+      const results = await Promise.allSettled([
+        request(`/api/incidents?${params}`),
+        request("/api/health"),
+      ]);
+      if (requestId !== state.requestId) return;
+      if (results[0].status === "fulfilled") {
+        state.pagination = results[0].value;
+        state.incidents = results[0].value.items || [];
+      } else {
+        showToast(`Your reports could not be loaded: ${results[0].reason.message}`, "error");
+      }
+      if (results[1].status === "fulfilled") setHealth(results[1].value);
+      renderIncidentList();
+      if (showMessage) showToast("Your reports were refreshed.");
+      return;
+    }
+    const results = await Promise.allSettled([
+      request(`/api/incidents?${params}`),
+      request("/api/stats"),
+      request("/api/health"),
+      state.activeView === "map"
+        ? Promise.resolve({ skipMapRefresh: true })
+        : requestAllMapPoints(new URLSearchParams({ limit: "5000" })),
+      request(`/api/analytics${state.analyticsQuery ? `?${state.analyticsQuery}` : ""}`),
+      request("/api/incidents?page=1&page_size=5&sort_by=created_at&sort_order=desc")
+    ]);
+    if (requestId !== state.requestId) return;
+    const failures = [];
+    if (results[0].status === "fulfilled") {
+      const page = results[0].value;
+      state.incidents = Array.isArray(page) ? page : (page.items || []);
+      state.pagination = Array.isArray(page)
+        ? { total: page.length, page: 1, page_size: page.length || state.pageSize, pages: 1 }
+        : page;
+      state.page = state.pagination.page || state.page;
+    } else failures.push(`Incidents: ${results[0].reason.message}`);
+    if (results[1].status === "fulfilled") setStats(results[1].value);
+    else failures.push(`Stats: ${results[1].reason.message}`);
+    if (results[2].status === "fulfilled") setHealth(results[2].value);
+    else {
+      setHealth(null);
+      failures.push(`Health: ${results[2].reason.message}`);
+    }
+    if (results[3].status === "fulfilled" && !results[3].value.skipMapRefresh) {
+      state.mapIncidents = results[3].value.items || [];
+      state.mapMeta = results[3].value;
+      state.mapError = null;
+      state.mapLoading = false;
+    } else if (results[3].status === "rejected") {
+      state.mapError = results[3].reason.message;
+      state.mapLoading = false;
+      state.mapIncidents = [];
+      state.mapMeta = null;
+      failures.push(`Map: ${results[3].reason.message}`);
+    }
+    if (results[4].status === "fulfilled") state.analytics = results[4].value;
+    else {
+      state.analytics = null;
+      failures.push(`Analytics: ${results[4].reason.message}`);
+    }
+    if (results[5].status === "fulfilled") {
+      const recent = results[5].value;
+      state.recentIncidents = Array.isArray(recent) ? recent : (recent.items || []);
+    } else failures.push(`Recent incidents: ${results[5].reason.message}`);
+    renderAll();
+    if (failures.length) showToast(failures.join(" · "), "error");
+    else if (showMessage) showToast("Live incident data refreshed.");
+  }
+
+  function incidentsByPriority(list = state.incidents) {
+    return [...list].sort((a, b) => number(b.priority_score) - number(a.priority_score));
+  }
+
+  function renderQueue(targetId, limit = 5) {
+    const target = byId(targetId);
+    const list = incidentsByPriority().slice(0, limit);
+    if (!list.length) {
+      target.innerHTML = '<div class="empty-state">No incident reports returned by the API.</div>';
+      return;
+    }
+    target.innerHTML = list.map(item => `<div class="queue-item"><i class="severity-rail ${esc(item.severity)}"></i><div class="queue-info"><strong>${esc(item.damage_type || "Unclassified report")}</strong><small>${esc(item.verification_status)} · ${esc(item.incident_status)} · ${esc(item.created_at || "")}</small></div><div class="queue-score">${number(item.priority_score).toFixed(1)}<small>priority</small></div></div>`).join("");
+  }
+
+  function mapIcon(color) {
+    return L.divIcon({ className: "incident-map-icon", html: `<span style="display:block;width:16px;height:16px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 1px 5px #14283f88"></span>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+  }
+
+  function priorityColor(score) {
+    if (score >= 85) return "#d94a3b";
+    if (score >= 70) return "#ef7d32";
+    if (score >= 40) return "#3975d5";
+    return "#218567";
+  }
+
+  function validCoordinates(item) {
+    return Number.isFinite(Number(item.latitude))
+      && Number.isFinite(Number(item.longitude))
+      && Number(item.latitude) >= -90 && Number(item.latitude) <= 90
+      && Number(item.longitude) >= -180 && Number(item.longitude) <= 180;
+  }
+
+  function formattedMapTime(value) {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "Time unavailable" : date.toLocaleString();
+  }
+
+  function setMapStatus(message, isError = false) {
+    const status = byId("mapStatus");
+    status.textContent = message;
+    status.classList.toggle("error", isError);
+    status.hidden = !message;
+  }
+
+  function mapDetailMarkup(item) {
+    return `<strong>${esc(item.damage_type || "Unclassified incident")}</strong><p>${esc(item.description || "No description provided.")}</p><div>Report: <b>${esc(item.id)}</b></div><div>Severity: <b>${esc(item.severity || "Unscored")}</b> · Priority: <b>${number(item.priority_score).toFixed(1)}/100</b></div><div>Reported: ${esc(formattedMapTime(item.reported_at || item.created_at))}</div><div>Verification: ${esc(item.verification_status || "Unknown")} · Response: ${esc(item.incident_status || "Unknown")}</div>${item.assigned_to ? `<div>Assigned to: ${esc(item.assigned_to)}</div>` : ""}${item.possible_duplicate ? `<div>Possible duplicate${item.duplicate_of ? ` of ${esc(item.duplicate_of)}` : ""}${item.duplicate_group_id ? ` · group ${esc(item.duplicate_group_id)}` : ""}</div>` : ""}<div>Coordinates: ${number(item.latitude).toFixed(5)}, ${number(item.longitude).toFixed(5)}</div>`;
+  }
+
+  function updateMapCategories() {
+    const select = byId("mapCategoryFilter");
+    const selected = select.value;
+    const categories = Object.keys(state.analytics?.category_counts || {}).sort((a, b) => a.localeCompare(b));
+    select.innerHTML = '<option value="all">All categories</option>' + categories.map(category => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
+    select.value = categories.includes(selected) ? selected : "all";
+  }
+
+  function ensureMap(containerId, full = false) {
+    const el = byId(containerId);
+    if (!el || state.maps[containerId]) return state.maps[containerId];
+    if (!window.L) {
+      el.innerHTML = '<div class="map-error">The interactive map library could not be loaded. Live incident data remains available through the incident list.</div>';
+      if (full) setMapStatus("Map library unavailable. Check network access or the Leaflet CDN.", true);
+      return null;
+    }
+    try {
+      el.innerHTML = "";
+      const map = L.map(el, { scrollWheelZoom: full }).setView([20.5937, 78.9629], 5);
+      const osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" });
+      const humanitarian = L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors, Tiles: HOT" });
+      osm.addTo(map);
+      if (full) {
+        L.control.layers({ "OpenStreetMap": osm, "Humanitarian": humanitarian }, {}, { collapsed: true }).addTo(map);
+        osm.once("tileerror", () => setMapStatus("OpenStreetMap tiles could not be loaded. Incident overlays remain available.", true));
+        humanitarian.once("tileerror", () => setMapStatus("Humanitarian basemap tiles could not be loaded. Incident overlays remain available.", true));
+      }
+      map._incidentMarkers = [];
+      map._markerLayer = null;
+      map._heatLayer = null;
+      map._responderLayer = L.layerGroup();
+      map._radiusCircle = null;
+      map._lastFitFingerprint = "";
+      state.maps[containerId] = map;
+      return map;
+    } catch (error) {
+      el.innerHTML = '<div class="map-error">The map could not be initialized. Refresh the map or check browser console/network access.</div>';
+      if (full) setMapStatus(`Map initialization failed: ${error.message}`, true);
+      return null;
+    }
+  }
+
+  function renderMap(containerId, full = false) {
+    const map = ensureMap(containerId, full);
+    if (!map) return;
+    if (map._markerLayer) {
+      map.removeLayer(map._markerLayer);
+      map._markerLayer.clearLayers();
+    }
+    if (map._heatLayer && map.hasLayer(map._heatLayer)) map.removeLayer(map._heatLayer);
+    if (map._responderLayer && map.hasLayer(map._responderLayer)) map.removeLayer(map._responderLayer);
+    if (map._radiusCircle && map.hasLayer(map._radiusCircle)) map.removeLayer(map._radiusCircle);
+    map._incidentMarkers = [];
+    const source = state.mapIncidents;
+    const invalidCount = source.filter(item => !validCoordinates(item)).length;
+    const duplicateOnly = full && byId("mapDuplicateToggle").checked;
+    const records = source.filter(item => validCoordinates(item)
+      && (!duplicateOnly || item.possible_duplicate === true));
+    const useClusters = !full || byId("mapClusterToggle").checked;
+    if (useClusters && typeof L.markerClusterGroup === "function") {
+      map._markerLayer = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        chunkedLoading: true,
+        iconCreateFunction: cluster => {
+          const markers = cluster.getAllChildMarkers();
+          const average = markers.reduce((sum, marker) => sum + number(marker.options.priorityScore), 0) / markers.length;
+          return L.divIcon({
+            html: `<span style="display:block;width:34px;height:34px;margin:0 auto;border-radius:50%;background:${priorityColor(average)}">${cluster.getChildCount()}</span>`,
+            className: "map-cluster",
+            iconSize: L.point(40, 40)
+          });
+        }
+      });
+    } else {
+      map._markerLayer = L.layerGroup();
+      if (useClusters && full && records.length > 1) setMapStatus("Marker-clustering extension unavailable; showing individual incident markers.", true);
+    }
+    records.forEach(item => {
+      const color = priorityColor(number(item.priority_score));
+      const marker = L.marker([number(item.latitude), number(item.longitude)], { icon: mapIcon(color) });
+      marker.options.priorityScore = number(item.priority_score);
+      marker.bindPopup(mapDetailMarkup(item));
+      marker.on("click", () => { byId("mapSelection").innerHTML = mapDetailMarkup(item); });
+      map._markerLayer.addLayer(marker);
+      map._incidentMarkers.push(marker);
+    });
+    map._markerLayer.addTo(map);
+
+    if (full && byId("mapHeatToggle").checked) {
+      if (typeof L.heatLayer === "function") {
+        map._heatLayer = L.heatLayer(records.map(item => [
+          Number(item.latitude),
+          Number(item.longitude),
+          Math.max(0.05, Math.min(1, number(item.priority_score) / 100))
+        ]), {
+          radius: 26,
+          blur: 20,
+          maxZoom: 14,
+          gradient: { 0.2: "#3975d5", 0.5: "#ef7d32", 0.8: "#d94a3b", 1: "#8e1e32" }
+        }).addTo(map);
+      } else setMapStatus("Heatmap extension unavailable; load leaflet.heat to enable this overlay.", true);
+    }
+
+    if (full && byId("mapResponderToggle").checked && state.mapResponders.length) {
+      state.mapResponders.filter(validCoordinates).forEach(responder => {
+        const marker = L.marker([Number(responder.latitude), Number(responder.longitude)], {
+          icon: L.divIcon({
+            className: "incident-map-icon",
+            html: '<span style="display:block;width:18px;height:18px;border-radius:5px;background:#193657;border:2px solid #fff;box-shadow:0 1px 5px #14283f88"></span>',
+            iconSize: [18, 18],
+            iconAnchor: [9, 9]
+          })
+        });
+        marker.bindPopup(`<strong>Responder · ${esc(responder.responder_name)}</strong><br><small>Location updated ${esc(formattedMapTime(responder.updated_at))}</small>`);
+        map._responderLayer.addLayer(marker);
+      });
+      map._responderLayer.addTo(map);
+    }
+
+    if (full && state.mapQuery?.radius_m) {
+      map._radiusCircle = L.circle(
+        [state.mapQuery.latitude, state.mapQuery.longitude],
+        { radius: state.mapQuery.radius_m, color: "#193657", weight: 1, fillOpacity: 0.05, dashArray: "5 5" }
+      ).addTo(map);
+    }
+
+    const fingerprint = records.map(item => item.id).sort().join("|");
+    if (map._incidentMarkers.length && fingerprint !== map._lastFitFingerprint && !(full && state.mapQuery?.radius_m)) {
+      const group = L.featureGroup(map._incidentMarkers);
+      map.fitBounds(group.getBounds().pad(.18), { maxZoom: 13 });
+      map._lastFitFingerprint = fingerprint;
+    }
+    if (containerId === "fullMap") {
+      const total = state.mapMeta?.total ?? records.length;
+      const limited = state.mapMeta?.returned < total ? " · result limit reached" : "";
+      byId("mapCount").textContent = state.mapLoading
+        ? "Loading live map data…"
+        : state.mapError
+          ? `Map API error · ${state.mapError}`
+          : `${records.length} displayed · ${total} matching live record${total === 1 ? "" : "s"}${limited}`;
+      if (state.mapError) {
+        setMapStatus(`Live map data is unavailable: ${state.mapError}`, true);
+      } else if (state.mapMeta?.invalid_coordinates || invalidCount) {
+        setMapStatus(`${(state.mapMeta?.invalid_coordinates || 0) + invalidCount} record(s) with invalid GPS coordinates were excluded from the map.`, true);
+      } else if (byId("mapResponderToggle").checked && state.responderError) {
+        setMapStatus(`Responder locations unavailable: ${state.responderError}`, true);
+      } else if (!state.mapError && !(full && byId("mapHeatToggle").checked && typeof L.heatLayer !== "function")) {
+        setMapStatus("");
+      }
+    }
+  }
+
+  function mapQuery() {
+    const params = new URLSearchParams({ limit: "5000" });
+    const severity = byId("mapSeverityFilter").value;
+    const category = byId("mapCategoryFilter").value;
+    if (severity !== "all") params.set("severity", severity);
+    if (category !== "all") params.set("damage_type", category);
+    const radiusKm = byId("mapRadiusKm").value.trim();
+    if (!radiusKm) return { params, location: null };
+    const radius = Number(radiusKm);
+    if (!Number.isFinite(radius) || radius < 0.1 || radius > 500) {
+      throw new Error("Radius must be between 0.1 and 500 km.");
+    }
+    const center = state.maps.fullMap?.getCenter();
+    if (!center) throw new Error("Map location is not available yet.");
+    const location = { latitude: center.lat, longitude: center.lng, radius_m: radius * 1000 };
+    params.set("latitude", String(location.latitude));
+    params.set("longitude", String(location.longitude));
+    params.set("radius_m", String(location.radius_m));
+    return { params, location };
+  }
+
+  async function loadMapData(showMessage = false) {
+    const requestId = ++state.mapRequestId;
+    let query;
+    try {
+      query = mapQuery();
+    } catch (error) {
+      setMapStatus(error.message, true);
+      return;
+    }
+    state.mapLoading = true;
+    state.mapError = null;
+    state.mapQuery = query.location;
+    byId("mapCount").textContent = "Loading filtered incident locations…";
+    byId("mapApplyButton").disabled = true;
+    try {
+      const result = await requestAllMapPoints(query.params);
+      if (requestId !== state.mapRequestId) return;
+      state.mapIncidents = Array.isArray(result.items) ? result.items : [];
+      state.mapMeta = result;
+      state.mapError = null;
+      state.mapLoading = false;
+      renderMap("fullMap", true);
+      if (showMessage) showToast("Live map filters applied.");
+    } catch (error) {
+      if (requestId !== state.mapRequestId) return;
+      state.mapError = error.message;
+      state.mapLoading = false;
+      state.mapIncidents = [];
+      state.mapMeta = null;
+      setMapStatus(`Could not load live map data: ${error.message}`, true);
+      renderMap("fullMap", true);
+    } finally {
+      if (requestId === state.mapRequestId) byId("mapApplyButton").disabled = false;
+    }
+  }
+
+  async function searchMapLocation() {
+    const query = byId("mapLocationSearch").value.trim();
+    if (!query) {
+      setMapStatus("Enter a city, district or landmark to search.", true);
+      return;
+    }
+    const button = byId("mapLocationSearchButton");
+    button.disabled = true;
+    button.textContent = "Searching…";
+    try {
+      const params = new URLSearchParams({ q: query, limit: "1" });
+      const response = await fetch(`https://photon.komoot.io/api/?${params}`);
+      if (!response.ok) throw new Error(`Location search failed (${response.status})`);
+      const result = await response.json();
+      const feature = result.features?.[0];
+      if (!feature || !Array.isArray(feature.geometry?.coordinates)) {
+        throw new Error("No matching place was found.");
+      }
+      const [longitude, latitude] = feature.geometry.coordinates.map(Number);
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude) || Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
+        throw new Error("Location service returned invalid coordinates.");
+      }
+      const map = ensureMap("fullMap", true);
+      if (map) map.setView([latitude, longitude], 12);
+      const properties = feature.properties || {};
+      const label = [properties.name, properties.city, properties.state, properties.country].filter(Boolean).join(", ");
+      setMapStatus(`Map centered on ${label || query}. Apply a radius to filter incidents near this location.`);
+    } catch (error) {
+      setMapStatus(error.message, true);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Search";
+    }
+  }
+
+  async function loadResponderLocations() {
+    if (!byId("mapResponderToggle").checked) {
+      state.mapResponders = [];
+      state.responderError = null;
+      renderMap("fullMap", true);
+      return;
+    }
+    try {
+      const result = await request("/api/responders/locations");
+      state.mapResponders = (result.items || []).filter(validCoordinates);
+      state.responderError = null;
+      renderMap("fullMap", true);
+      setMapStatus(`${state.mapResponders.length} responder location(s) loaded from the protected API.`);
+    } catch (error) {
+      state.mapResponders = [];
+      state.responderError = error.message;
+      renderMap("fullMap", true);
+      setMapStatus(`Responder locations unavailable: ${error.message}`, true);
+    }
+  }
+
+  function renderIncidentList() {
+    const list = incidentsByPriority();
+    byId("incidentCount").textContent = `${list.length} shown · ${state.pagination.total || 0} matching reports`;
+    const root = byId("incidentList");
+    releasePrivateImages(root);
+    if (!list.length) {
+      root.innerHTML = `<div class="empty-state"><div class="empty-icon">⌕</div>${state.pagination.total ? "No reports on this page." : (state.incidents.length ? "No reports match these search and filter settings." : "No incident reports returned by the API.")}</div>`;
+      renderPagination();
+      return;
+    }
+    root.innerHTML = list.map(item => {
+      const score = confidence(item);
+      const assessed = item.ai_analysis?.status === "complete";
+      const image = item.image_url ? `<img class="incident-thumb" data-private-image="${esc(item.image_url)}" alt="" loading="lazy">` : '<span class="incident-thumb"></span>';
+      const adminActions = state.currentUser?.role === "admin"
+        ? `<button class="button success small" data-action="verify" data-id="${esc(item.id)}">✓ Verify</button><button class="button danger small" data-action="reject" data-id="${esc(item.id)}">× Reject</button><select class="select" data-action="workflow" data-id="${esc(item.id)}" aria-label="Update response status">${workflowStatuses.map(status => `<option${item.incident_status === status ? " selected" : ""}>${status}</option>`).join("")}</select><input class="input assign-input" data-assignee="${esc(item.id)}" value="${esc(item.assigned_to || "")}" placeholder="Responder email or name" aria-label="Responder email or name"><button class="button light small" data-action="assign" data-id="${esc(item.id)}">Save assignment</button><button class="button danger small" data-action="delete" data-id="${esc(item.id)}">Delete report</button>`
+        : state.currentUser?.role === "responder" && item.assigned_to === state.currentUser.display_name
+          ? `<select class="select" data-action="workflow" data-id="${esc(item.id)}" aria-label="Update response status">${workflowStatuses.map(status => `<option${item.incident_status === status ? " selected" : ""}>${status}</option>`).join("")}</select>`
+          : "";
+      return `<article class="incident-card"><div class="incident-main">${image}<div><div class="incident-title"><strong>${esc(item.damage_type || "Unclassified report")}</strong><span class="severity ${esc(item.severity)}">${esc(item.severity || "Unscored")}</span></div><p class="incident-description">${esc(item.description || "No description provided.")}</p><div class="incident-meta"><span>${esc(item.verification_status || "Pending")}</span><span>·</span><span>${esc(item.incident_status || "Reported")}</span><span>·</span><span class="confidence"><i class="confidence-dot ${assessed && score >= .7 ? "good" : assessed && score > 0 ? "low" : ""}"></i>${assessed ? `${(score * 100).toFixed(1)}% model score` : "Not assessed"}</span><span>·</span><span>${esc(item.created_at || "")}</span></div><div class="incident-meta" style="margin-top:5px"><span>${esc(item.latitude)}, ${esc(item.longitude)}</span>${item.duplicate_of ? `<span>· Possible duplicate: ${esc(item.duplicate_of)}</span>` : ""}<span>· ${esc(item.model_name || "Model not specified")}</span></div></div><div class="incident-score">${number(item.priority_score).toFixed(1)}<small>priority score</small></div></div>${adminActions ? `<div class="incident-actions">${adminActions}</div>` : ""}</article>`;
+    }).join("");
+    hydratePrivateImages(root);
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const page = state.pagination.page || state.page;
+    const pages = Math.max(1, state.pagination.pages || 1);
+    byId("incidentPagination").innerHTML = `<div class="pagination"><span class="pagination-label">Page ${page} of ${pages} · ${state.pagination.total || 0} results</span><div class="pagination-actions"><button class="button outline small" data-action="page-prev" ${page <= 1 ? "disabled" : ""}>← Previous</button><button class="button outline small" data-action="page-next" ${page >= pages ? "disabled" : ""}>Next →</button></div></div>`;
+  }
+
+  function drawBars(targetId, counts, order = null) {
+    const entries = order ? [...order.map(key => [key, counts[key] || 0]), ...Object.entries(counts).filter(([key]) => !order.includes(key))] : Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const max = Math.max(1, ...entries.map(([, value]) => value));
+    byId(targetId).innerHTML = entries.length ? entries.map(([label, value]) => `<div class="bar-row"><span>${esc(label)}</span><div class="bar-track"><div class="bar-fill ${esc(label)}" style="width:${value ? Math.max(3, value / max * 100) : 0}%;background-color:${severityColors[label] || ""}"></div></div><span class="bar-value">${value}</span></div>`).join("") : '<div class="empty-state">No data returned by the API.</div>';
+  }
+
+  function renderAnalytics() {
+    const data = state.analytics;
+    byId("analyticsTotal").textContent = data ? number(data.total).toLocaleString() : "—";
+    byId("analyticsCriticalHigh").textContent = data ? number(data.critical_high).toLocaleString() : "—";
+    byId("analyticsHighPriorityFoot").textContent = data
+      ? `${number(data.high_priority).toLocaleString()} priority ≥ ${number(data.high_priority_threshold).toFixed(0)}`
+      : "High-priority threshold: —";
+    byId("analyticsVerifiedPending").textContent = data
+      ? `${number(data.verified).toLocaleString()} / ${number(data.pending).toLocaleString()}`
+      : "—";
+    byId("analyticsVerificationFoot").textContent = data
+      ? `Rejected: ${number(data.verification_counts?.Rejected).toLocaleString()}`
+      : "Rejected: —";
+    byId("analyticsResolvedActive").textContent = data
+      ? `${number(data.resolved).toLocaleString()} / ${number(data.active).toLocaleString()}`
+      : "—";
+    byId("analyticsVerificationTime").textContent = data?.average_verification_seconds != null
+      ? formatVerificationDuration(data.average_verification_seconds)
+      : "—";
+    byId("analyticsVerificationTimeFoot").textContent = data
+      ? `${number(data.verification_time_count).toLocaleString()} completed review${data.verification_time_count === 1 ? "" : "s"}`
+      : "No completed reviews";
+    byId("meanPriority").textContent = data ? number(data.mean_priority).toFixed(1) : "—";
+    byId("duplicateCount").textContent = data
+      ? `Possible duplicates: ${number(data.duplicate_candidates).toLocaleString()}`
+      : "Possible duplicates: —";
+    drawBars("severityChart", data?.severity_counts || {}, severityOrder);
+    drawBars("verificationChart", data?.verification_counts || {}, ["Pending", "Verified", "Rejected"]);
+    drawBars("categoryChart", data?.category_counts || {});
+    drawBars("workflowChart", data?.response_counts || {}, workflowStatuses);
+    drawBars(
+      "trendChart",
+      Object.fromEntries((data?.trends || []).map(item => [item.period, item.count])),
+      (data?.trends || []).map(item => item.period),
+    );
+    byId("analyticsTrendSubtitle").textContent = data
+      ? `Incident counts grouped by ${data.trend_granularity}`
+      : "Counts grouped by report date";
+    updateAnalyticsCategories();
+    renderGeographicConcentration();
+    if (state.activeView === "analytics") renderAnalyticsMap();
+  }
+
+  function formatVerificationDuration(seconds) {
+    const value = Number(seconds);
+    if (!Number.isFinite(value) || value < 0) return "—";
+    if (value < 60) return `${Math.round(value)} sec`;
+    if (value < 3600) return `${Math.round(value / 60)} min`;
+    if (value < 86400) return `${(value / 3600).toFixed(1)} hr`;
+    return `${(value / 86400).toFixed(1)} days`;
+  }
+
+  function updateAnalyticsCategories() {
+    const select = byId("analyticsDamageType");
+    const selected = select.value;
+    const categories = Object.keys(state.analytics?.category_counts || {}).sort((a, b) => a.localeCompare(b));
+    select.innerHTML = '<option value="all">All categories</option>' +
+      categories.map(category => `<option value="${esc(category)}">${esc(category)}</option>`).join("");
+    select.value = categories.includes(selected) ? selected : "all";
+  }
+
+  function renderGeographicConcentration() {
+    const points = state.analytics?.geographic_concentrations || [];
+    byId("geoConcentrationList").innerHTML = points.length
+      ? points.slice(0, 8).map(point =>
+        `<div class="geo-row"><span>${number(point.latitude).toFixed(2)}, ${number(point.longitude).toFixed(2)}</span><strong>${number(point.count).toLocaleString()} incident${point.count === 1 ? "" : "s"}</strong></div>`
+      ).join("")
+      : '<div class="empty-state">No located incidents match these filters.</div>';
+  }
+
+  function renderAnalyticsMap() {
+    const element = byId("analyticsMap");
+    if (!element || state.activeView !== "analytics") return;
+    if (!window.L) {
+      element.innerHTML = '<div class="map-placeholder">The map library is unavailable; geographic concentration counts remain listed below.</div>';
+      return;
+    }
+    try {
+      if (!state.maps.analyticsMap) {
+        const map = L.map(element, { scrollWheelZoom: false }).setView([20.5937, 78.9629], 4);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: "© OpenStreetMap contributors",
+        }).addTo(map);
+        state.maps.analyticsMap = map;
+        state.analyticsLayer = L.layerGroup().addTo(map);
+      }
+      const map = state.maps.analyticsMap;
+      const layer = state.analyticsLayer;
+      const points = state.analytics?.geographic_concentrations || [];
+      layer.clearLayers();
+      if (points.length) {
+        const maxCount = Math.max(...points.map(point => number(point.count)));
+        const bounds = [];
+        points.forEach(point => {
+          const coordinates = [number(point.latitude), number(point.longitude)];
+          bounds.push(coordinates);
+          L.circleMarker(coordinates, {
+            radius: Math.max(7, Math.min(24, 7 + Math.sqrt(number(point.count) / maxCount) * 17)),
+            color: "#d94a3b",
+            weight: 1,
+            fillColor: "#ef7d32",
+            fillOpacity: 0.62,
+          }).bindPopup(`<strong>${number(point.count)} incident${point.count === 1 ? "" : "s"}</strong><br>${coordinates[0].toFixed(2)}, ${coordinates[1].toFixed(2)}`).addTo(layer);
+        });
+        map.fitBounds(bounds, { padding: [24, 24], maxZoom: 11 });
+      } else {
+        map.setView([20.5937, 78.9629], 4);
+      }
+      setTimeout(() => map.invalidateSize(), 50);
+    } catch (error) {
+      console.error("Could not render analytics concentration map", error);
+      element.innerHTML = '<div class="map-placeholder">Geographic visualization is unavailable. Use the concentration list below.</div>';
+    }
+  }
+
+  function buildAnalyticsQuery() {
+    const params = new URLSearchParams();
+    const values = [
+      ["date_from", "analyticsDateFrom"],
+      ["date_to", "analyticsDateTo"],
+      ["min_latitude", "analyticsMinLatitude"],
+      ["max_latitude", "analyticsMaxLatitude"],
+      ["min_longitude", "analyticsMinLongitude"],
+      ["max_longitude", "analyticsMaxLongitude"],
+    ];
+    values.forEach(([key, id]) => {
+      const value = byId(id).value.trim();
+      if (value) params.set(key, value);
+    });
+    const locationFields = values.slice(2).map(([, id]) => byId(id).value.trim());
+    if (locationFields.some(Boolean) && locationFields.some(value => !value)) {
+      throw new Error("Enter all four geographic bounds or clear them.");
+    }
+    if (byId("analyticsDamageType").value !== "all") params.set("damage_type", byId("analyticsDamageType").value);
+    if (byId("analyticsSeverity").value !== "all") params.set("severity", byId("analyticsSeverity").value);
+    if (byId("analyticsVerification").value !== "all") params.set("verification_status", byId("analyticsVerification").value);
+    if (byId("analyticsResponse").value !== "all") params.set("incident_status", byId("analyticsResponse").value);
+    return params.toString();
+  }
+
+  async function applyAnalyticsFilters() {
+    try {
+      state.analyticsQuery = buildAnalyticsQuery();
+      state.analytics = await request(`/api/analytics${state.analyticsQuery ? `?${state.analyticsQuery}` : ""}`);
+      renderAnalytics();
+      showToast("Filtered analytics updated.");
+    } catch (error) {
+      showToast(`Could not load analytics: ${error.message}`, "error");
+    }
+  }
+
+  async function exportAnalyticsCsv() {
+    try {
+      const headers = new Headers();
+      const token = sessionStorage.getItem("dmAccessToken");
+      if (token) headers.set("Authorization", `Bearer ${token}`);
+      const query = state.analyticsQuery ? `?${state.analyticsQuery}` : "";
+      const response = await fetch(`/api/analytics/export.csv${query}`, { headers });
+      if (response.status === 401 && token) {
+        sessionStorage.removeItem("dmAccessToken");
+        state.currentUser = null;
+        showAuthGate("Your session expired. Please sign in again.");
+      }
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.detail || `Export failed (${response.status})`);
+      }
+      const url = URL.createObjectURL(await response.blob());
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "damage-mapper-incidents.csv";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast("Filtered incident CSV downloaded.");
+    } catch (error) {
+      showToast(`Could not export incident reports: ${error.message}`, "error");
+    }
+  }
+
+  function renderAI() {
+    const data = state.analytics;
+    byId("aiAnalysed").textContent = data ? number(data.model_analysed).toLocaleString() : "—";
+    byId("aiConfidence").textContent = data?.mean_model_confidence != null ? `${(number(data.mean_model_confidence) * 100).toFixed(1)}%` : "—";
+    byId("aiReview").textContent = data ? number(data.needs_review).toLocaleString() : "—";
+    drawBars("aiCategoryChart", data?.category_counts || {});
+    const recent = state.recentIncidents;
+    releasePrivateImages(byId("aiRecent"));
+    byId("aiRecent").innerHTML = recent.length ? recent.map(item => {
+      const analysis = item.ai_analysis;
+      const complete = analysis?.status === "complete";
+      const score = complete ? Number(analysis.confidence) : null;
+      const candidates = (analysis?.candidate_classes || []).map(candidate => `${esc(candidate.category)} ${(number(candidate.confidence) * 100).toFixed(1)}%`).join(" · ");
+      const detections = (analysis?.detected_objects || []).length;
+      return `<article class="incident-card"><div class="incident-main"><img class="incident-thumb" data-private-image="${esc(item.image_url || "")}" alt="" loading="lazy"><div><div class="incident-title"><strong>${esc(analysis?.predicted_category || item.damage_type || "Unclassified")}</strong><span class="severity ${esc(item.severity)}">${esc(item.severity || "Unscored")}</span></div><p class="incident-description">${esc(item.model_name || "Model not specified")} · ${esc(analysis?.status || "legacy")} · ${number(analysis?.processing_time_ms).toFixed(1)} ms</p><div class="incident-meta"><span>${complete ? `${(score * 100).toFixed(1)}% model score` : "No model prediction"}</span><span>·</span><span>${analysis?.review_required ? "Human review required" : "Above review threshold"}</span><span>·</span><span>${detections} detected objects</span></div>${candidates ? `<div class="incident-meta" style="margin-top:5px"><span>Top candidates: ${candidates}</span></div>` : ""}<div class="incident-meta" style="margin-top:5px"><span>${esc(item.verification_status || "Pending review")}</span><span>·</span><span>${esc(item.created_at || "")}</span></div></div><div class="incident-score">${complete ? `${(score * 100).toFixed(0)}%` : "—"}<small>model score</small></div></div></article>`;
+    }).join("") : '<div class="empty-state">No analysis records returned by the API.</div>';
+    hydratePrivateImages(byId("aiRecent"));
+  }
+
+  function renderAll() {
+    if (state.currentUser?.role === "citizen") {
+      renderIncidentList();
+      return;
+    }
+    renderQueue("overviewQueue");
+    renderQueue("dashboardQueue");
+    renderIncidentList();
+    updateMapCategories();
+    if (state.activeView === "overview") renderMap("overviewMap");
+    if (state.activeView === "dashboard") renderMap("dashboardMap");
+    if (state.activeView === "map") renderMap("fullMap", true);
+    renderAnalytics();
+    renderAI();
+    byId("adminIncidentCount").textContent = state.incidents.length.toLocaleString();
+    if (state.activeView === "map") setTimeout(() => state.maps.fullMap?.invalidateSize(), 50);
+  }
+
+  function navigate(view) {
+    const citizen = state.currentUser?.role === "citizen";
+    const next = titles[view] && (!citizen || ["report", "incidents"].includes(view))
+      ? view
+      : (citizen ? "report" : "overview");
+    state.activeView = next;
+    document.querySelectorAll(".view").forEach(section => section.classList.toggle("active", section.id === `view-${next}`));
+    document.querySelectorAll(".nav-link").forEach(link => link.classList.toggle("active", link.dataset.view === next));
+    byId("topTitle").textContent = titles[next];
+    document.title = `${titles[next]} | Damage Mapper`;
+    closeSidebar();
+    if (next === "overview") renderMap("overviewMap");
+    if (next === "dashboard") renderMap("dashboardMap");
+    if (next === "map") {
+      updateMapCategories();
+      renderMap("fullMap", true);
+      loadMapData();
+      setTimeout(() => state.maps.fullMap?.invalidateSize(), 80);
+    }
+    if (next === "analytics") {
+      renderAnalytics();
+      renderAnalyticsMap();
+    }
+  }
+
+  function closeSidebar() {
+    byId("sidebar").classList.remove("open");
+    byId("sidebarBackdrop").classList.remove("visible");
+    byId("menuToggle").setAttribute("aria-expanded", "false");
+  }
+
+  function locate(target = "latitude") {
+    if (!navigator.geolocation) {
+      showToast("Geolocation is not supported by this browser.", "error");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(position => {
+      if (target === "map") {
+        navigate("map");
+        setTimeout(() => state.maps.fullMap?.setView([position.coords.latitude, position.coords.longitude], 14), 100);
+      } else {
+        byId("latitude").value = position.coords.latitude.toFixed(6);
+        byId("longitude").value = position.coords.longitude.toFixed(6);
+        showToast("Current coordinates added to the report.");
+      }
+    }, error => showToast(`Location unavailable: ${error.message}`, "error"), { enableHighAccuracy: true, timeout: 10000 });
+  }
+
+  async function updateIncident(id, payload) {
+    await request(`/api/incidents/${encodeURIComponent(id)}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    await refreshData();
+    showToast("Incident updated.");
+  }
+
+  async function deleteIncident(id) {
+    if (!window.confirm("Delete this incident and its uploaded evidence? This cannot be undone.")) return;
+    await request(`/api/incidents/${encodeURIComponent(id)}`, { method: "DELETE" });
+    await refreshData();
+    showToast("Incident and uploaded evidence deleted.");
+  }
+
+  async function seedDemo() {
+    try {
+      const result = await request("/api/demo-seed", { method: "POST" });
+      await refreshData();
+      showToast(`${result.created?.length || 0} new synthetic sample reports added.`);
+    } catch (error) {
+      showToast(`Could not load sample incidents: ${error.message}`, "error");
+    }
+  }
+
+  byId("reportForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const button = byId("submitButton");
+    button.disabled = true;
+    button.textContent = "Analysing report…";
+    try {
+      const formData = new FormData(form);
+      formData.set("access_blocked", byId("accessBlocked").checked ? "true" : "false");
+      const result = await request("/api/incidents", { method: "POST", body: formData });
+      form.reset();
+      byId("imagePreview").classList.add("hidden");
+      if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
+      state.previewUrl = null;
+      await refreshData();
+      showToast(`Report submitted · ${result.damage_type} · ${result.severity} · priority ${number(result.priority_score).toFixed(1)} · ${result.model_name}`);
+      navigate("incidents");
+    } catch (error) {
+      showToast(`Report submission failed: ${error.message}`, "error");
+    } finally {
+      button.disabled = false;
+      button.textContent = "✳ Analyse & submit report";
+    }
+  });
+
+  byId("reportImage").addEventListener("change", event => {
+    const file = event.target.files?.[0];
+    const preview = byId("imagePreview");
+    if (state.previewUrl) URL.revokeObjectURL(state.previewUrl);
+    state.previewUrl = file ? URL.createObjectURL(file) : null;
+    preview.src = state.previewUrl || "";
+    preview.classList.toggle("hidden", !file);
+  });
+
+  function applyIncidentFilters() {
+    state.page = 1;
+    refreshData();
+  }
+  byId("incidentSearch").addEventListener("input", () => {
+    clearTimeout(state.searchTimer);
+    state.searchTimer = setTimeout(applyIncidentFilters, 250);
+  });
+  ["severityFilter", "statusFilter", "workflowFilter"].forEach(id => byId(id).addEventListener("change", applyIncidentFilters));
+  ["mapSeverityFilter", "mapCategoryFilter"].forEach(id => byId(id).addEventListener("change", () => loadMapData()));
+  ["mapClusterToggle", "mapHeatToggle", "mapDuplicateToggle"].forEach(id => {
+    byId(id).addEventListener("change", () => renderMap("fullMap", true));
+  });
+  byId("mapResponderToggle").addEventListener("change", loadResponderLocations);
+  byId("mapLocationSearch").addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      searchMapLocation();
+    }
+  });
+  byId("refreshButton").addEventListener("click", () => {
+    if (state.activeView === "map") loadMapData(true);
+    else refreshData(true);
+  });
+  byId("menuToggle").addEventListener("click", () => {
+    const open = byId("sidebar").classList.toggle("open");
+    byId("sidebarBackdrop").classList.toggle("visible", open);
+    byId("menuToggle").setAttribute("aria-expanded", String(open));
+  });
+  byId("sidebarBackdrop").addEventListener("click", closeSidebar);
+  byId("authModeToggle").addEventListener("click", () => {
+    authMode = authMode === "login" ? "register" : "login";
+    byId("authTitle").textContent = authMode === "login" ? "Sign in to Damage Mapper" : "Create a citizen account";
+    byId("authNameField").hidden = authMode !== "register";
+    byId("authName").required = authMode === "register";
+    byId("authPassword").autocomplete = authMode === "login" ? "current-password" : "new-password";
+    byId("authSubmit").textContent = authMode === "login" ? "Sign in" : "Create account";
+    byId("authModeToggle").textContent = authMode === "login" ? "Create account" : "Back to sign in";
+    byId("authError").hidden = true;
+  });
+  byId("authForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const body = {
+      email: byId("authEmail").value.trim(),
+      password: byId("authPassword").value,
+    };
+    if (authMode === "register") body.display_name = byId("authName").value.trim();
+    byId("authSubmit").disabled = true;
+    byId("authError").hidden = true;
+    try {
+      const result = await request(`/api/auth/${authMode === "login" ? "login" : "register"}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      sessionStorage.setItem("dmAccessToken", result.access_token);
+      state.currentUser = result.user;
+      applyUserRole();
+      navigate(state.currentUser.role === "citizen" ? "report" : (location.hash.slice(1) || "overview"));
+      await refreshData();
+    } catch (error) {
+      byId("authError").textContent = error.message;
+      byId("authError").hidden = false;
+    } finally {
+      byId("authSubmit").disabled = false;
+    }
+  });
+  byId("logoutButton").addEventListener("click", async () => {
+    try {
+      await request("/api/auth/logout", { method: "POST" });
+    } catch (error) {
+      showToast(`Session sign-out could not be confirmed: ${error.message}`, "error");
+    } finally {
+      sessionStorage.removeItem("dmAccessToken");
+      state.currentUser = null;
+      showAuthGate();
+    }
+  });
+
+  document.addEventListener("click", async event => {
+    const nav = event.target.closest("[data-view]");
+    if (nav) {
+      event.preventDefault();
+      const view = nav.dataset.view;
+      if (location.hash !== `#${view}`) history.pushState(null, "", `#${view}`);
+      navigate(view);
+      return;
+    }
+    const go = event.target.closest("[data-go]");
+    if (go) {
+      const view = go.dataset.go;
+      if (location.hash !== `#${view}`) history.pushState(null, "", `#${view}`);
+      navigate(view);
+      return;
+    }
+    const action = event.target.closest("[data-action]");
+    if (!action) return;
+    try {
+      switch (action.dataset.action) {
+        case "refresh": await refreshData(true); break;
+        case "refresh-map": await loadMapData(true); break;
+        case "apply-map-filters": await loadMapData(true); break;
+        case "apply-analytics": await applyAnalyticsFilters(); break;
+        case "clear-analytics":
+          ["analyticsDateFrom", "analyticsDateTo", "analyticsMinLatitude", "analyticsMaxLatitude", "analyticsMinLongitude", "analyticsMaxLongitude"].forEach(id => { byId(id).value = ""; });
+          ["analyticsDamageType", "analyticsSeverity", "analyticsVerification", "analyticsResponse"].forEach(id => { byId(id).value = "all"; });
+          await applyAnalyticsFilters();
+          break;
+        case "export-analytics": await exportAnalyticsCsv(); break;
+        case "find-location": await searchMapLocation(); break;
+        case "locate": locate("map"); break;
+        case "locate-form": locate("latitude"); break;
+        case "seed-demo": await seedDemo(); break;
+        case "page-prev": state.page = Math.max(1, state.page - 1); await refreshData(); break;
+        case "page-next": state.page += 1; await refreshData(); break;
+        case "verify": await updateIncident(action.dataset.id, { verification_status: "Verified" }); break;
+        case "reject": await updateIncident(action.dataset.id, { verification_status: "Rejected" }); break;
+        case "delete": await deleteIncident(action.dataset.id); break;
+        case "assign": {
+          const input = document.querySelector(`[data-assignee="${CSS.escape(action.dataset.id)}"]`);
+          const name = input.value.trim();
+          await updateIncident(action.dataset.id, { assigned_to: name, incident_status: name ? "Assigned" : "Reported" });
+          break;
+        }
+      }
+    } catch (error) {
+      showToast(`Could not update incident: ${error.message}`, "error");
+    }
+  });
+
+  document.addEventListener("change", async event => {
+    const select = event.target.closest('[data-action="workflow"]');
+    if (!select) return;
+    try {
+      await updateIncident(select.dataset.id, { incident_status: select.value });
+    } catch (error) {
+      showToast(`Could not update response status: ${error.message}`, "error");
+      renderIncidentList();
+    }
+  });
+
+  window.addEventListener("hashchange", () => navigate(location.hash.slice(1)));
+  window.addEventListener("popstate", () => navigate(location.hash.slice(1)));
+  async function initialize() {
+    const token = sessionStorage.getItem("dmAccessToken");
+    if (!token) {
+      showAuthGate();
+      return;
+    }
+    try {
+      state.currentUser = await request("/api/auth/me");
+      applyUserRole();
+      navigate(location.hash.slice(1) || (state.currentUser.role === "citizen" ? "report" : "overview"));
+      await refreshData();
+    } catch {
+      showAuthGate("Please sign in to continue.");
+    }
+  }
+  initialize();
+})();
+</script>
+</body>
+</html>

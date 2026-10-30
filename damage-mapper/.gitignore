@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+.env.*
+!.env.example
+!.env.production.example
+damage_mapper.db
+damage_mapper.db-*
+uploads/*
+!uploads/.gitkeep

@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: damage-mapper-api
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: alembic upgrade head
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: DM_ENVIRONMENT
+        value: production
+      - key: DM_STORAGE_BACKEND
+        value: supabase
+      - key: SUPABASE_STORAGE_BUCKET
+        value: incident-evidence
+      - key: DM_ENABLE_DEMO
+        value: "0"
+      - key: DM_DISABLE_MODEL
+        value: "1"
+      - key: DM_CORS_ORIGINS
+        value: ""
+      - key: DM_TRUSTED_HOSTS
+        value: damage-mapper-api.onrender.com
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: DM_ADMIN_BOOTSTRAP_SECRET
+        sync: false
