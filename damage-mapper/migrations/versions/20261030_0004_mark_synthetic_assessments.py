@@ -15,7 +15,7 @@ def upgrade() -> None:
     op.execute(
         "UPDATE incidents "
         "SET model_analysis_status = 'synthetic', model_confidence = 0, "
-        "model_review_required = 1 "
+        "model_review_required = TRUE "
         "WHERE model_name = 'Synthetic demo data'"
     )
 
