@@ -3,7 +3,7 @@ services:
     name: damage-mapper-api
     rootDir: damage-mapper
     runtime: python
-    plan: starter
+    plan: free
     buildCommand: pip install -r requirements.txt
     preDeployCommand: alembic upgrade head
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
